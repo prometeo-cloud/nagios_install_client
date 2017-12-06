@@ -1,0 +1,46 @@
+---
+# tasks file for nagios_install_client
+- name: Check Operating System
+  fail:
+    msg="You're not running a supported operating system (CentOS or RHEL 7+)"
+  when: ((ansible_os_family != "RedHat") or (ansible_distribution_major_version|int < 7))
+
+- name: Ensuring subscription-manager is installed
+  yum:
+    name: subscription-manager
+    state: latest
+
+- name: Disabling all repositories
+  command: subscription-manager repos --disable="*"
+
+- name: Enabling only the required repositories
+  command: subscription-manager repos --enable="{{ item }}"
+  with_items: "{{ repos_to_enable }}"
+
+- name: Activate the EPEL repository on RHEL 7.4
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+
+- name: Install NRPE and Common Plugins
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ packages_to_install }}"
+
+- name: Setup NRPE client configuration
+  template:src=templates/nrpe.cfg.j2 dest=/etc/nagios/nrpe.cfg
+
+- name: Start NRPE Service
+  systemd:
+    name: nrpe
+    state: started
+    enabled: true
+  when: ansible_virtualization_type != "docker"
+
+- name: Start xinted service
+  systemd:
+     name: xinted
+     state: started
+     enabled: true
+  when: ansible_virtualization_type != "docker"
