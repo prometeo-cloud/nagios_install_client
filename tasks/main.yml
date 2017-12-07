@@ -29,18 +29,15 @@
   with_items: "{{ packages_to_install }}"
 
 - name: Setup NRPE client configuration
-  template:src=templates/nrpe.cfg.j2 dest=/etc/nagios/nrpe.cfg
+  template: src=templates/nrpe.cfg.j2 dest=/etc/nagios/nrpe.cfg
 
 - name: Start NRPE Service
-  systemd:
+  service:
     name: nrpe
     state: started
     enabled: true
   when: ansible_virtualization_type != "docker"
 
 - name: Start xinted service
-  systemd:
-     name: xinted
-     state: started
-     enabled: true
+  action: service name=xinetd state=restarted
   when: ansible_virtualization_type != "docker"
