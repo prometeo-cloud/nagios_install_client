@@ -31,6 +31,12 @@
 - name: Setup NRPE client configuration
   template: src=templates/nrpe.cfg.j2 dest=/etc/nagios/nrpe.cfg
 
+- name: Adding the entry of NRPE Daemon
+  command: echo "nrpe 5666/tcp NRPE" >> /etc/services
+
+- name: Configuring the Firewall rules
+  command: firewall-cmd --zone=public --add-port=5666/tcp --permanent
+
 - name: Start NRPE Service
   service:
     name: nrpe

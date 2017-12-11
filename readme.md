@@ -25,6 +25,8 @@ Needs to be provided to the role before execution.
 | Variable  | Description  | Example  | 
 |---|---|---|
 | **nrpe_tcp_port** | The nrpe port | 5666 |
+| **nagios_client_hostname** | The Nagios Client Hostname |  |
+| **nagios_client_hostname** | The Nagios Server Hostname |  |
 | **nagios_server_hostname** | The Nagios Server Hostname |  |
 
 ## Usage:
