@@ -38,7 +38,7 @@
   command: firewall-cmd --zone=public --add-port={{ nrpe_tcp_port }}/tcp --permanent
 
 - name: Start NRPE Service
-  service:d
+  service:
     name: nrpe
     state: started
     enabled: true

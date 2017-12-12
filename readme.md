@@ -8,8 +8,8 @@ This role install Nagios client and generate hosts/checks.
 
 Deploying the Nagios Server.
 
-**Feature:** Creates/Installs/Configures a Nagios Client  
-- **Given**a Host for client
+**Feature:** Install/Configures a Nagios Client
+- **Given**a Nagios Server Hostname for the new Nagios client
 - **Given**a repository link for additional packages
 - **When** deployment is executed
 - **Then** Nagios NRPE and Common Plugins are installed  
@@ -25,8 +25,6 @@ Needs to be provided to the role before execution.
 | Variable  | Description  | Example  | 
 |---|---|---|
 | **nrpe_tcp_port** | The nrpe port | 5666 |
-| **nagios_client_hostname** | The Nagios Client Hostname |  |
-| **nagios_client_hostname** | The Nagios Server Hostname |  |
 | **nagios_server_hostname** | The Nagios Server Hostname |  |
 
 ## Usage:
