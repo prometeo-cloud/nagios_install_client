@@ -34,8 +34,17 @@
 - name: Adding the entry of NRPE Daemon
   command: echo "nrpe {{ nrpe_tcp_port }}/tcp NRPE" >> /etc/services
 
+- name: Check if firewalld is in use
+  shell: "which firewall-cmd 2>&1 > /dev/null && firewall-cmd --state ; exit 0"
+  register: firewalldstate
+
 - name: Configuring the Firewall rules
-  command: firewall-cmd --zone=public --add-port={{ nrpe_tcp_port }}/tcp --permanent
+  when: firewalldstate.stdout | match("running")
+  command: "{{ item }}"
+  with_items:
+    - firewall-cmd --zone=public --add-port={{nrpe_tcp_port}}/tcp --permanent
+    - firewall-cmd --reload
+  ignore_errors: true
 
 - name: Start NRPE Service
   service:
